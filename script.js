@@ -18,10 +18,17 @@ function getRandomQuestion() {
     document.getElementById("question").innerText = `Reyom, what comes after ${currentQuestion.value}?`;
 }
 
+function speakMessage(message) {
+    const speech = new SpeechSynthesisUtterance(message);
+    speech.lang = "en-US"; // You can adjust the language if needed
+    window.speechSynthesis.speak(speech);
+}
+
 function checkAnswer() {
     let userAnswer = document.getElementById("answer").value.trim();
     if (userAnswer.toLowerCase() === String(currentQuestion.next)) {
         document.getElementById("response").innerText = "Correct! Let's try another.";
+        speakMessage("Congrachulation mero Reyom xora. I love you mero babu.");
     } else {
         document.getElementById("response").innerText = "Sorry Reyom.";
     }
