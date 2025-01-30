@@ -2,9 +2,9 @@ const letters = "abcdefghijklmnopqrstuvwxyz".split("");
 const nepaliLetters = "\u0915\u0916\u0917\u0918\u0919\u091a\u091b\u091c\u091d\u091e\u091f\u0920\u0921\u0922\u0923\u0924\u0925\u0926\u0927\u0928\u092a\u092b\u092c\u092d\u092e\u092f\u0930\u0932\u0935\u0936\u0937\u0938\u0939\u0915\u094d\u0937\u091c\u094d\u091e\u0924\u094d\u0930".split("");
 const numbers = Array.from({ length: 100 }, (_, i) => i + 1);
 const roadSigns = [
-    { color: "Red", meaning: "Stop", image: "https://via.placeholder.com/100/ff0000?text=STOP" },
-    { color: "Green", meaning: "Go", image: "https://via.placeholder.com/100/00ff00?text=GO" },
-    { color: "Yellow", meaning: "Hold", image: "https://via.placeholder.com/100/ffff00?text=HOLD" }
+    { color: "Red", meaning: "Stop", hex: "#FF0000" },
+    { color: "Green", meaning: "Go", hex: "#00FF00" },
+    { color: "Yellow", meaning: "Hold", hex: "#FFFF00" }
 ];
 
 let currentQuestion;
@@ -26,7 +26,7 @@ function getRandomQuestion() {
         showTextQuestion(`Reyom, what comes after ${currentQuestion.value}?`);
     } else {
         let sign = roadSigns[Math.floor(Math.random() * roadSigns.length)];
-        currentQuestion = { type: 'roadSign', color: sign.color, meaning: sign.meaning };
+        currentQuestion = { type: 'roadSign', color: sign.color, meaning: sign.meaning, hex: sign.hex };
         showSignQuestion(sign);
     }
 }
@@ -39,7 +39,10 @@ function showTextQuestion(text) {
 
 function showSignQuestion(sign) {
     document.getElementById("question").innerText = "Which color is this?";
-    document.getElementById("sign-image").src = sign.image;
+    let signBox = document.getElementById("sign-box");
+    signBox.style.backgroundColor = sign.hex;
+    signBox.style.display = "block";
+
     document.getElementById("multiple-choice").style.display = "block";
     document.getElementById("text-answer").style.display = "none";
     
