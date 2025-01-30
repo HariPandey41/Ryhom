@@ -3,17 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Puzzle Game</title>
+    <title>What Comes After?</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <div class="container">
-        <h1>Puzzle Game for Kids</h1>
-        <div id="question"></div>
-        <div id="game-board"></div>
-        <button id="start-game">Start Game</button>
-        <div id="score">Score: 0</div>
-        <audio id="correct-sound" src="correct.mp3"></audio>
+        <h1>Reyom welcome. Let's play What Comes After Game.</h1>
+        <p id="question"></p>
+        <input type="text" id="answer" placeholder="Your answer here">
+        <button onclick="checkAnswer()">Submit</button>
+        <p id="response"></p>
     </div>
     <script src="script.js"></script>
 </body>
