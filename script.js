@@ -1,98 +1,32 @@
-const gameBoard = document.getElementById('game-board');
-const startButton = document.getElementById('start-game');
-const scoreDisplay = document.getElementById('score');
-const questionDisplay = document.getElementById('question');
-const correctSound = document.getElementById('correct-sound');
-let score = 0;
-let currentQuestion = null;
-
-const alphabets = ['क', 'ख', 'ग', 'घ', 'ङ', 'च', 'छ', 'ज', 'झ', 'ञ', 'ट', 'ठ', 'ड', 'ढ', 'ण', 'त', 'थ', 'द', 'ध', 'न', 'प', 'फ', 'ब', 'भ', 'म', 'य', 'र', 'ल', 'व', 'श', 'ष', 'स', 'ह'];
+const letters = "abcdefghijklmnopqrstuvwxyz".split("");
+const nepaliLetters = "\u0915\u0916\u0917\u0918\u0919\u091a\u091b\u091c\u091d\u091e\u091f\u0920\u0921\u0922\u0923\u0924\u0925\u0926\u0927\u0928\u092a\u092b\u092c\u092d\u092e\u092f\u0930\u0932\u0935\u0936\u0937\u0938\u0939\u0915\u094d\u0937\u091c\u094d\u091e\u0924\u094d\u0930".split("");
 const numbers = Array.from({ length: 100 }, (_, i) => i + 1);
-const englishAlphabets = Array.from({ length: 26 }, (_, i) => String.fromCharCode(97 + i));
+let currentQuestion;
 
-let tiles = [...alphabets, ...numbers, ...englishAlphabets];
-
-function shuffle(array) {
-    for (let i = array.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [array[i], array[j]] = [array[j], array[i]];
-    }
-}
-
-function createGameBoard() {
-    gameBoard.innerHTML = '';
-    shuffle(tiles);
-    tiles.forEach((tile, index) => {
-        const tileElement = document.createElement('div');
-        tileElement.classList.add('tile');
-        tileElement.dataset.value = tile;
-        tileElement.textContent = tile;
-        tileElement.addEventListener('click', () => selectTile(tileElement));
-        gameBoard.appendChild(tileElement);
-    });
-}
-
-function selectTile(tile) {
-    if (tile.classList.contains('selected')) {
-        tile.classList.remove('selected');
-        score -= 1;
+function getRandomQuestion() {
+    let category = Math.floor(Math.random() * 3);
+    if (category === 0) {
+        let index = Math.floor(Math.random() * (letters.length - 1));
+        currentQuestion = { type: 'letter', value: letters[index], next: letters[index + 1] };
+    } else if (category === 1) {
+        let index = Math.floor(Math.random() * (nepaliLetters.length - 1));
+        currentQuestion = { type: 'nepali', value: nepaliLetters[index], next: nepaliLetters[index + 1] };
     } else {
-        tile.classList.add('selected');
-        score += 1;
-        if (tile.dataset.value === currentQuestion.correctAnswer) {
-            playCorrectSound();
-        }
+        let number = numbers[Math.floor(Math.random() * (numbers.length - 1))];
+        currentQuestion = { type: 'number', value: number, next: number + 1 };
     }
-    scoreDisplay.textContent = `Score: ${score}`;
+    document.getElementById("question").innerText = `Reyom, what comes after ${currentQuestion.value}?`;
 }
 
-function playCorrectSound() {
-    correctSound.play();
-    speak("Congratulations, my dear son. I love you.");
-}
-
-function speak(text) {
-    const utterance = new SpeechSynthesisUtterance(text);
-    utterance.lang = 'en-US';
-    utterance.rate = 0.8;
-    utterance.pitch = 1;
-    utterance.volume = 1;
-    window.speechSynthesis.speak(utterance);
-}
-
-function generateQuestion() {
-    const questionType = Math.floor(Math.random() * 3);
-    let questionText = '';
-    let correctAnswer = '';
-
-    switch (questionType) {
-        case 0: // English alphabets
-            const randomIndexEng = Math.floor(Math.random() * englishAlphabets.length);
-            questionText = `Reyom Son, what comes after ${englishAlphabets[randomIndexEng]}?`;
-            correctAnswer = englishAlphabets[(randomIndexEng + 1) % englishAlphabets.length];
-            break;
-        case 1: // Hindi alphabets
-            const randomIndexHindi = Math.floor(Math.random() * alphabets.length);
-            questionText = `Reyom Son, what comes after ${alphabets[randomIndexHindi]}?`;
-            correctAnswer = alphabets[(randomIndexHindi + 1) % alphabets.length];
-            break;
-        case 2: // Numbers
-            const randomIndexNum = Math.floor(Math.random() * numbers.length);
-            questionText = `Reyom Son, what comes after ${numbers[randomIndexNum]}?`;
-            correctAnswer = numbers[(randomIndexNum + 1) % numbers.length];
-            break;
+function checkAnswer() {
+    let userAnswer = document.getElementById("answer").value.trim();
+    if (userAnswer.toLowerCase() === String(currentQuestion.next)) {
+        document.getElementById("response").innerText = "Correct! Let's try another.";
+    } else {
+        document.getElementById("response").innerText = "Sorry Reyom.";
     }
-
-    currentQuestion = { question: questionText, correctAnswer: correctAnswer };
-    questionDisplay.textContent = questionText;
+    document.getElementById("answer").value = "";
+    getRandomQuestion();
 }
 
-startButton.addEventListener('click', () => {
-    score = 0;
-    scoreDisplay.textContent = `Score: ${score}`;
-    generateQuestion();
-    createGameBoard();
-});
-
-generateQuestion();
-createGameBoard();
+getRandomQuestion();
