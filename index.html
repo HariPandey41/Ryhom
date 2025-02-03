@@ -3,28 +3,33 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>What Comes Next & Road Signs</title>
+    <title>Reyom's Fun Learning</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <div class="container">
-        <h1>Reyom welcome. Let's play!</h1>
-        <p id="question"></p>
 
-        <!-- Number & Alphabet Answer Box -->
-        <div id="text-answer">
-            <input type="text" id="answer" placeholder="Your answer here">
-            <button onclick="checkAnswer()">Submit</button>
+    <!-- Background Video -->
+    <video autoplay loop muted playsinline id="background-video">
+        <source src="https://cdn.pixabay.com/video/2023/09/20/184498-867880558_large.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+    </video>
+
+    <!-- Game Container -->
+    <div class="game-container">
+        <h1>Reyom, Welcome! Let's Play!</h1>
+        <div class="question-box">
+            <p id="question">Which color is this?</p>
+            <div id="color-box"></div>
+            <div class="options">
+                <button class="option" onclick="checkAnswer('Green')">Green</button>
+                <button class="option" onclick="checkAnswer('Red')">Red</button>
+                <button class="option" onclick="checkAnswer('Yellow')">Yellow</button>
+            </div>
         </div>
-
-        <!-- Multiple Choice Buttons (For Road Signs) -->
-        <div id="multiple-choice" style="display: none;">
-            <div id="sign-box"></div>
-            <div id="options"></div>
-        </div>
-
         <p id="response"></p>
     </div>
+
     <script src="script.js"></script>
+
 </body>
 </html>
