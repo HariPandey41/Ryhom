@@ -228,6 +228,7 @@ const mcqBlock = el("multiple-choice");
 const optionsGrid = el("options");
 const responseEl = el("response");
 const skipBtn = el("skip-btn");
+const micBtn = el("mic-btn");
 
 const prizeModal = el("prize-modal");
 const prizeLevelName = el("prize-level-name");
@@ -449,7 +450,8 @@ function buildNepaliQuestion() {
   return {
     mode: "text",
     text: `${heroLabel()}, what comes after "${value}"?`,
-    answer: next
+    answer: next,
+    lang: "ne-NP"
   };
 }
 
@@ -565,6 +567,8 @@ function renderQuestion() {
     textAnswerBlock.classList.remove("hidden");
     mcqBlock.classList.add("hidden");
     answerInput.value = "";
+    if (isListening && recognition) recognition.stop();
+    stopListeningUi();
     setTimeout(() => answerInput.focus(), 50);
   } else {
     mcqBlock.classList.remove("hidden");
@@ -607,6 +611,30 @@ function normalize(str) {
   return String(str).trim().toLowerCase();
 }
 
+const NUMBER_WORDS = {
+  zero: 0, one: 1, two: 2, three: 3, four: 4, five: 5, six: 6, seven: 7, eight: 8, nine: 9,
+  ten: 10, eleven: 11, twelve: 12, thirteen: 13, fourteen: 14, fifteen: 15, sixteen: 16,
+  seventeen: 17, eighteen: 18, nineteen: 19, twenty: 20, thirty: 30, forty: 40, fifty: 50,
+  sixty: 60, seventy: 70, eighty: 80, ninety: 90, hundred: 100
+};
+
+// Best-effort fallback: turns a spoken phrase like "twenty three" into 23,
+// in case the browser returns number words instead of digits.
+function wordsToNumber(text) {
+  const words = normalize(text).replace(/-/g, " ").split(/\s+/);
+  let total = 0;
+  let matchedAny = false;
+  words.forEach((w) => {
+    if (Object.prototype.hasOwnProperty.call(NUMBER_WORDS, w)) {
+      matchedAny = true;
+      const val = NUMBER_WORDS[w];
+      if (val === 100) total = (total || 1) * 100;
+      else total += val;
+    }
+  });
+  return matchedAny ? total : null;
+}
+
 submitBtn.addEventListener("click", handleTextAnswer);
 answerInput.addEventListener("keydown", (e) => {
   if (e.key === "Enter") handleTextAnswer();
@@ -614,10 +642,77 @@ answerInput.addEventListener("keydown", (e) => {
 
 function handleTextAnswer() {
   const userAnswer = answerInput.value;
-  const isCorrect = normalize(userAnswer) === normalize(currentQuestion.answer);
+  let isCorrect = normalize(userAnswer) === normalize(currentQuestion.answer);
+
+  if (!isCorrect && /^\d+$/.test(String(currentQuestion.answer))) {
+    const spokenNumber = wordsToNumber(userAnswer);
+    if (spokenNumber !== null && String(spokenNumber) === String(currentQuestion.answer)) {
+      isCorrect = true;
+    }
+  }
+
   processAnswer(isCorrect);
   answerInput.value = "";
 }
+
+/* ---- voice answer (Web Speech API) ---- */
+const SpeechRecognitionCtor = window.SpeechRecognition || window.webkitSpeechRecognition;
+let recognition = null;
+let isListening = false;
+
+function speechInputSupported() {
+  return !!SpeechRecognitionCtor;
+}
+
+function stopListeningUi() {
+  isListening = false;
+  micBtn.classList.remove("listening");
+  micBtn.textContent = "🎤 Speak";
+}
+
+function startListening() {
+  if (!speechInputSupported() || isListening) return;
+  recognition = new SpeechRecognitionCtor();
+  recognition.lang = (currentQuestion && currentQuestion.lang) || "en-US";
+  recognition.interimResults = false;
+  recognition.maxAlternatives = 1;
+
+  isListening = true;
+  micBtn.classList.add("listening");
+  micBtn.textContent = "🎙️ Listening...";
+  responseEl.textContent = "I'm listening... say your answer!";
+  responseEl.className = "response-text";
+
+  recognition.onresult = (event) => {
+    const transcript = event.results[0][0].transcript.trim();
+    answerInput.value = transcript;
+    responseEl.textContent = `I heard: "${transcript}"`;
+    stopListeningUi();
+    setTimeout(() => handleTextAnswer(), 700);
+  };
+  recognition.onerror = () => {
+    stopListeningUi();
+    responseEl.textContent = "Didn't catch that — try again or type it in!";
+    responseEl.className = "response-text retry";
+  };
+  recognition.onend = () => {
+    stopListeningUi();
+  };
+
+  try {
+    recognition.start();
+  } catch (e) {
+    stopListeningUi();
+  }
+}
+
+micBtn.addEventListener("click", () => {
+  if (isListening) {
+    recognition.stop();
+    return;
+  }
+  startListening();
+});
 
 function handleMcqAnswer(selected, btnEl) {
   const isCorrect = normalize(selected) === normalize(currentQuestion.answer);
@@ -848,4 +943,7 @@ resetProgressBtn.addEventListener("click", () => {
 
 document.addEventListener("DOMContentLoaded", () => {
   initStartScreen();
+  if (!speechInputSupported()) {
+    micBtn.classList.add("hidden");
+  }
 });
