@@ -1,47 +1,540 @@
-body {
-    font-family: Arial, sans-serif;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    margin: 0;
-    background-color: #f0f8ff;
-    text-align: center;
+/* ===========================================================
+   Reyom's Hero Academy — Comic Book Design System
+   Color:  Comic Red #E63946 · Comic Blue #1D3557 · Sunburst Gold #FFB703
+           Cream Paper #FFF8E7 · Ink Black #14131F · Success Green #2A9D8F
+   Type:   Display = "Bangers" (shout font) · Body/UI = "Baloo 2"
+   =========================================================== */
+
+:root{
+  --red: #E63946;
+  --blue: #1D3557;
+  --gold: #FFB703;
+  --cream: #FFF8E7;
+  --ink: #14131F;
+  --green: #2A9D8F;
+  --purple: #7B2CBF;
+
+  --radius: 18px;
+  --border: 4px;
+  --shadow-offset: 8px;
 }
 
-.container {
-    background: white;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    width: 300px;
+*{ box-sizing: border-box; }
+
+html, body{
+  margin: 0;
+  min-height: 100vh;
+  font-family: "Baloo 2", "Segoe UI", sans-serif;
+  background: var(--cream);
+  color: var(--ink);
+  overflow-x: hidden;
 }
 
-input {
-    margin-top: 10px;
-    padding: 5px;
-    font-size: 16px;
+body{
+  position: relative;
+  display: flex;
+  justify-content: center;
+  min-height: 100vh;
 }
 
-button {
-    margin-top: 10px;
-    padding: 10px;
-    font-size: 16px;
-    cursor: pointer;
+/* ---------- halftone background ---------- */
+.halftone-bg{
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  background-image:
+    radial-gradient(var(--blue) 1.6px, transparent 1.6px);
+  background-size: 22px 22px;
+  opacity: 0.07;
+  pointer-events: none;
 }
 
-#sign-box {
-    width: 100px;
-    height: 100px;
-    margin: 10px auto;
-    border: 3px solid black;
-    display: none;
+#confetti-canvas{
+  position: fixed;
+  inset: 0;
+  z-index: 500;
+  pointer-events: none;
 }
 
-.option-button {
-    padding: 10px;
-    margin: 5px;
-    font-size: 16px;
-    cursor: pointer;
-    display: inline-block;
+/* ---------- generic comic panel ---------- */
+.panel{
+  background: #fff;
+  border: var(--border) solid var(--ink);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-offset) var(--shadow-offset) 0 var(--ink);
+}
+.panel-thin{
+  background: #fff;
+  border: 3px solid var(--ink);
+  border-radius: 999px;
+  box-shadow: 4px 4px 0 var(--ink);
+}
+
+.comic-title{
+  font-family: "Bangers", cursive;
+  letter-spacing: 1px;
+  line-height: 1;
+  margin: 0.2em 0;
+  color: var(--blue);
+  -webkit-text-stroke: 1.5px var(--ink);
+  text-shadow: 3px 3px 0 var(--gold);
+}
+
+.eyebrow{
+  font-family: "Baloo 2", sans-serif;
+  font-weight: 800;
+  letter-spacing: 3px;
+  font-size: 0.75rem;
+  color: var(--red);
+  margin: 0 0 4px;
+}
+
+.field-label{
+  font-weight: 700;
+  font-size: 0.9rem;
+  color: var(--blue);
+  margin: 14px 0 6px;
+  text-align: left;
+}
+
+.pow{
+  font-family: "Bangers", cursive;
+  color: var(--gold);
+  -webkit-text-stroke: 1px var(--ink);
+  margin-left: 6px;
+}
+
+.hidden{ display: none !important; }
+
+/* ---------- buttons ---------- */
+.btn{
+  font-family: "Baloo 2", sans-serif;
+  font-weight: 800;
+  font-size: 1rem;
+  border: var(--border) solid var(--ink);
+  border-radius: 999px;
+  padding: 12px 22px;
+  cursor: pointer;
+  background: #fff;
+  color: var(--ink);
+  box-shadow: 5px 5px 0 var(--ink);
+  transition: transform 0.08s ease, box-shadow 0.08s ease;
+}
+.btn:active{
+  transform: translate(3px, 3px);
+  box-shadow: 2px 2px 0 var(--ink);
+}
+.btn-primary{
+  background: var(--red);
+  color: #fff;
+}
+.btn-big{
+  width: 100%;
+  font-size: 1.15rem;
+  padding: 16px 22px;
+}
+
+.btn-link{
+  background: none;
+  border: none;
+  color: var(--blue);
+  font-weight: 700;
+  font-size: 0.9rem;
+  text-decoration: underline;
+  cursor: pointer;
+  margin-top: 14px;
+  padding: 6px;
+}
+.danger-link{ color: var(--red); }
+
+.icon-btn{
+  background: #fff;
+  border: 3px solid var(--ink);
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  font-size: 1.1rem;
+  cursor: pointer;
+  box-shadow: 3px 3px 0 var(--ink);
+}
+.icon-btn:active{ transform: translate(2px,2px); box-shadow: 1px 1px 0 var(--ink); }
+
+/* ===========================================================
+   START SCREEN
+   =========================================================== */
+.screen{
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 480px;
+  min-height: 100vh;
+  padding: 20px 16px 40px;
+  margin: 0 auto;
+}
+
+#start-screen{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.burst-shape{
+  position: absolute;
+  border-radius: 50%;
+  z-index: -1;
+}
+.burst-1{
+  width: 260px; height: 260px;
+  background: var(--gold);
+  opacity: 0.5;
+  top: -60px; left: -80px;
+  clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
+}
+.burst-2{
+  width: 200px; height: 200px;
+  background: var(--green);
+  opacity: 0.35;
+  bottom: -50px; right: -70px;
+  clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
+}
+
+.start-card{
+  padding: 28px 22px;
+  text-align: center;
+  width: 100%;
+}
+
+.comic-title{ font-size: 2.6rem; }
+.tagline{
+  font-weight: 700;
+  color: var(--ink);
+  margin: 6px 0 4px;
+}
+
+#hero-name{
+  width: 100%;
+  font-family: "Baloo 2", sans-serif;
+  font-size: 1.1rem;
+  font-weight: 700;
+  padding: 12px 14px;
+  border: 3px solid var(--ink);
+  border-radius: 12px;
+  text-align: center;
+  background: var(--cream);
+}
+#hero-name:focus{ outline: 3px solid var(--gold); }
+
+.avatar-picker{
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+  margin: 8px 0 4px;
+}
+.avatar-option{
+  font-size: 1.8rem;
+  padding: 10px 0;
+  border: 3px solid var(--ink);
+  border-radius: 14px;
+  background: #fff;
+  cursor: pointer;
+  box-shadow: 3px 3px 0 var(--ink);
+}
+.avatar-option.selected{
+  background: var(--gold);
+  transform: translate(2px, 2px);
+  box-shadow: 1px 1px 0 var(--ink);
+}
+
+/* ===========================================================
+   GAME SCREEN / HUD
+   =========================================================== */
+#game-screen{ padding-top: 14px; }
+
+.hud{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 14px;
+  gap: 8px;
+}
+.hud-hero{ display: flex; align-items: center; gap: 10px; min-width: 0; }
+.hero-avatar-badge{
+  font-size: 1.6rem;
+  background: var(--blue);
+  border: 3px solid var(--ink);
+  border-radius: 50%;
+  width: 46px; height: 46px;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+.hud-hero-text{ display: flex; flex-direction: column; min-width: 0; text-align: left; }
+.hud-hero-name{
+  font-weight: 800;
+  font-size: 0.95rem;
+  color: var(--ink);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.hud-level-name{
+  font-weight: 700;
+  font-size: 0.72rem;
+  color: var(--red);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.hud-stats{ display: flex; align-items: center; gap: 6px; }
+.stat-pill{
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 6px 10px;
+  font-weight: 800;
+  font-size: 0.95rem;
+}
+.star-pill{ color: var(--gold); background:#fff; }
+.star-pill span:last-child{ color: var(--ink); }
+.streak-pill span:last-child{ color: var(--ink); }
+.stat-icon{ font-size: 1rem; }
+
+.power-meter-wrap{ margin: 12px 4px 8px; }
+.power-meter{
+  height: 20px;
+  overflow: hidden;
+  position: relative;
+}
+.power-meter-fill{
+  height: 100%;
+  width: 0%;
+  background: repeating-linear-gradient(45deg, var(--gold), var(--gold) 10px, #ffca3a 10px, #ffca3a 20px);
+  transition: width 0.5s cubic-bezier(.34,1.56,.64,1);
+  border-radius: 999px;
+}
+.power-meter-label{
+  display: block;
+  text-align: center;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--blue);
+  margin-top: 4px;
+}
+
+.category-chip{
+  display: inline-block;
+  margin: 4px auto 10px;
+  padding: 5px 16px;
+  background: var(--purple);
+  color: #fff;
+  font-weight: 800;
+  font-size: 0.75rem;
+  letter-spacing: 1.5px;
+  border-radius: 999px;
+  border: 2px solid var(--ink);
+  text-align: center;
+}
+#game-screen{ text-align: center; }
+
+/* ---------- question panel ---------- */
+.question-panel{
+  padding: 22px 18px 26px;
+  margin-top: 4px;
+}
+
+.speech-bubble{
+  position: relative;
+  background: var(--cream);
+  border: 3px solid var(--ink);
+  border-radius: 16px;
+  padding: 16px;
+  margin-bottom: 8px;
+}
+.speech-bubble::after{
+  content: "";
+  position: absolute;
+  bottom: -14px;
+  left: 40px;
+  width: 0; height: 0;
+  border: 12px solid transparent;
+  border-top-color: var(--ink);
+}
+.speech-bubble::before{
+  content: "";
+  position: absolute;
+  bottom: -10px;
+  left: 43px;
+  width: 0; height: 0;
+  border: 9px solid transparent;
+  border-top-color: var(--cream);
+  z-index: 1;
+}
+
+.question-text{
+  font-weight: 800;
+  font-size: 1.25rem;
+  color: var(--ink);
+  margin: 0;
+  line-height: 1.35;
+}
+
+.sign-box{
+  width: 90px;
+  height: 90px;
+  margin: 14px auto;
+  border: 4px solid var(--ink);
+  border-radius: 12px;
+  display: none;
+}
+
+.visual-box{
+  font-size: 2.4rem;
+  letter-spacing: 6px;
+  margin: 10px 0;
+  min-height: 1.4em;
+}
+
+.answer-block{ margin-top: 14px; }
+
+.answer-input{
+  width: 100%;
+  font-family: "Baloo 2", sans-serif;
+  font-size: 1.2rem;
+  font-weight: 700;
+  padding: 12px 14px;
+  border: 3px solid var(--ink);
+  border-radius: 12px;
+  text-align: center;
+  margin-bottom: 12px;
+  background: #fff;
+}
+.answer-input:focus{ outline: 3px solid var(--gold); }
+
+.options-grid{
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+.option-button{
+  font-family: "Baloo 2", sans-serif;
+  font-weight: 800;
+  font-size: 1.05rem;
+  padding: 16px 8px;
+  border: 3px solid var(--ink);
+  border-radius: 14px;
+  background: #fff;
+  cursor: pointer;
+  box-shadow: 4px 4px 0 var(--ink);
+}
+.option-button:active{ transform: translate(2px,2px); box-shadow: 2px 2px 0 var(--ink); }
+.option-button.correct{ background: var(--green); color: #fff; }
+.option-button.wrong{ background: var(--red); color: #fff; }
+
+.response-text{
+  min-height: 1.6em;
+  font-weight: 800;
+  font-size: 1.05rem;
+  margin: 12px 0 0;
+}
+.response-text.good{ color: var(--green); }
+.response-text.retry{ color: var(--red); }
+
+#skip-btn{ display: block; margin-left: auto; margin-right: auto; }
+
+/* ===========================================================
+   MODALS — Prize / Settings
+   =========================================================== */
+.modal-overlay{
+  position: fixed;
+  inset: 0;
+  z-index: 600;
+  background: rgba(20, 19, 31, 0.72);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.prize-burst{
+  position: absolute;
+  width: 90vmin;
+  height: 90vmin;
+  background: var(--gold);
+  clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
+  animation: spin-slow 18s linear infinite;
+  z-index: -1;
+  opacity: 0.9;
+}
+@keyframes spin-slow{ to{ transform: rotate(360deg); } }
+
+.prize-card{
+  max-width: 380px;
+  width: 100%;
+  padding: 28px 24px;
+  text-align: center;
+  animation: pop-in 0.35s cubic-bezier(.34,1.56,.64,1);
+}
+@keyframes pop-in{
+  from{ transform: scale(0.6); opacity: 0; }
+  to{ transform: scale(1); opacity: 1; }
+}
+
+.prize-kicker{
+  font-weight: 800;
+  letter-spacing: 2px;
+  color: var(--red);
+  font-size: 0.85rem;
+  margin: 0;
+}
+.prize-title{ font-size: 2.2rem; }
+.prize-badge-emoji{
+  font-size: 4rem;
+  margin: 10px 0;
+}
+.prize-badge-name{
+  font-weight: 800;
+  font-size: 1.15rem;
+  color: var(--blue);
+  margin: 0 0 4px;
+}
+.prize-badge-desc{
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: var(--ink);
+  margin: 0 0 18px;
+}
+
+/* ---------- settings ---------- */
+.settings-card{ text-align: left; max-height: 88vh; overflow-y: auto; }
+.settings-title{ font-size: 1.9rem; text-align: center; }
+.category-toggles{ display: flex; flex-direction: column; gap: 8px; margin-bottom: 6px; }
+.cat-toggle-row{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: var(--cream);
+  border: 2px solid var(--ink);
+  border-radius: 10px;
+  padding: 8px 12px;
+}
+.cat-toggle-row label{ font-weight: 700; font-size: 0.92rem; }
+.settings-row{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 12px 0;
+}
+.switch-label{ font-weight: 700; }
+input[type="checkbox"]{ width: 22px; height: 22px; accent-color: var(--red); }
+
+/* ---------- responsive ---------- */
+@media (min-width: 520px){
+  .comic-title{ font-size: 3rem; }
+}
+@media (max-width: 360px){
+  .options-grid{ grid-template-columns: 1fr; }
+}
+
+/* ---------- reduced motion ---------- */
+@media (prefers-reduced-motion: reduce){
+  *{ animation-duration: 0.001s !important; transition-duration: 0.001s !important; }
 }
