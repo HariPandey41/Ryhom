@@ -8,7 +8,15 @@
    1. CONTENT DATA
    ----------------------------------------------------------- */
 
-const AVATARS = ["🦸", "🦸‍♂️", "🦸‍♀️", "🦹", "🧑‍🚀", "🦁", "🐯", "🐉"];
+const PHOTO_AVATAR = "photo:reyom.jpg";
+const AVATARS = [PHOTO_AVATAR, "🦸", "🦸‍♂️", "🦸‍♀️", "🦹", "🧑‍🚀", "🦁", "🐯", "🐉"];
+
+function isPhotoAvatar(value) {
+  return typeof value === "string" && value.indexOf("photo:") === 0;
+}
+function photoAvatarSrc(value) {
+  return value.slice("photo:".length);
+}
 
 const LEVELS = [
   { name: "Rookie Hero" },
@@ -158,7 +166,7 @@ function defaultState() {
   Object.keys(CATEGORIES).forEach((k) => (enabledCategories[k] = true));
   return {
     heroName: "Reyom",
-    avatar: AVATARS[0],
+    avatar: PHOTO_AVATAR,
     stars: 0,
     correctTotal: 0,
     streak: 0,
@@ -587,7 +595,21 @@ function renderQuestion() {
 
 function renderHud() {
   hudHeroName.textContent = heroLabel();
-  heroAvatarBadge.textContent = state.avatar;
+  if (isPhotoAvatar(state.avatar)) {
+    heroAvatarBadge.innerHTML = "";
+    const img = document.createElement("img");
+    img.src = photoAvatarSrc(state.avatar);
+    img.alt = "Reyom";
+    img.className = "hero-avatar-img";
+    img.onerror = () => {
+      state.avatar = AVATARS[1];
+      saveState();
+      renderHud();
+    };
+    heroAvatarBadge.appendChild(img);
+  } else {
+    heroAvatarBadge.textContent = state.avatar;
+  }
   hudStreak.textContent = state.streak;
   hudStars.textContent = state.stars;
 
@@ -811,7 +833,22 @@ function buildAvatarPicker() {
     const btn = document.createElement("button");
     btn.type = "button";
     btn.className = "avatar-option" + (av === state.avatar ? " selected" : "");
-    btn.textContent = av;
+    if (isPhotoAvatar(av)) {
+      const img = document.createElement("img");
+      img.src = photoAvatarSrc(av);
+      img.alt = "Reyom";
+      img.className = "avatar-photo-thumb";
+      img.onerror = () => {
+        btn.remove();
+        if (state.avatar === av) {
+          state.avatar = AVATARS[1];
+          saveState();
+        }
+      };
+      btn.appendChild(img);
+    } else {
+      btn.textContent = av;
+    }
     btn.addEventListener("click", () => {
       state.avatar = av;
       Array.from(avatarPicker.children).forEach((c) => c.classList.remove("selected"));
