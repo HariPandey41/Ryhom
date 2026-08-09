@@ -118,7 +118,26 @@ const SCIENCE_QUESTIONS = [
   { q: "Which one is a living thing?", options: ["Tree", "Stone", "Chair", "Table"], answer: "Tree" },
   { q: "Which one is a non-living thing?", options: ["Rock", "Bird", "Fish", "Boy"], answer: "Rock" },
   { q: "What do we wear when it is very cold?", options: ["Warm sweater", "Slippers only", "Sunglasses", "Nothing"], answer: "Warm sweater" },
-  { q: "What falls from the sky when it rains?", options: ["Water drops", "Sand", "Leaves", "Snowballs only"], answer: "Water drops" }
+  { q: "What falls from the sky when it rains?", options: ["Water drops", "Sand", "Leaves", "Snowballs only"], answer: "Water drops" },
+
+  /* -- plants: herbs, shrubs, trees, climbers, creepers -- */
+  { q: "Tulsi and mint are small, soft-stemmed plants. What are they called?", options: ["Herbs", "Trees", "Shrubs", "Climbers"], answer: "Herbs" },
+  { q: "A rose plant is bushy with many woody branches. What is it called?", options: ["Shrub", "Herb", "Creeper", "Tree"], answer: "Shrub" },
+  { q: "A mango plant is tall with one thick, hard, woody stem. What is it called?", options: ["Tree", "Herb", "Shrub", "Creeper"], answer: "Tree" },
+  { q: "A pea plant climbs up a stick using thin curly threads. What is it called?", options: ["Climber", "Tree", "Herb", "Shrub"], answer: "Climber" },
+  { q: "A pumpkin plant spreads and grows flat along the ground. What is it called?", options: ["Creeper", "Tree", "Shrub", "Herb"], answer: "Creeper" },
+  { q: "Which of these is an herb?", options: ["Coriander", "Mango tree", "Rose bush", "Banyan tree"], answer: "Coriander" },
+  { q: "Which of these is a tree?", options: ["Banyan tree", "Tulsi", "Grass", "Mint"], answer: "Banyan tree" },
+
+  /* -- planets & solar system -- */
+  { q: "Which planet do we live on?", options: ["Earth", "Mars", "Jupiter", "Venus"], answer: "Earth" },
+  { q: "What do we call the giant, hot object at the center of our solar system?", options: ["The Sun", "The Moon", "A star chart", "A planet"], answer: "The Sun" },
+  { q: "What do we call the object we see in the sky at night that orbits the Earth?", options: ["The Moon", "The Sun", "A cloud", "A planet"], answer: "The Moon" },
+  { q: "Which planet is known as the Red Planet?", options: ["Mars", "Earth", "Venus", "Saturn"], answer: "Mars" },
+  { q: "Which is the biggest planet in our solar system?", options: ["Jupiter", "Earth", "Mercury", "Mars"], answer: "Jupiter" },
+  { q: "Which planet has big, beautiful rings around it?", options: ["Saturn", "Earth", "Mars", "Mercury"], answer: "Saturn" },
+  { q: "Which planet is closest to the Sun?", options: ["Mercury", "Earth", "Neptune", "Mars"], answer: "Mercury" },
+  { q: "How many planets are there in our solar system?", options: ["8", "5", "10", "3"], answer: "8" }
 ];
 
 /* ---- English grammar (Grade 1 Nepal) ---- */
@@ -138,7 +157,18 @@ const GRAMMAR_QUESTIONS = [
   { q: "Which one is a naming word (noun)?", options: ["Dog", "Run", "Jump", "Happy"], answer: "Dog" },
   { q: "Which one is a naming word (noun)?", options: ["School", "Eat", "Fast", "Sing"], answer: "School" },
   { q: "Which one is an action word (verb)?", options: ["Run", "Dog", "Chair", "Sky"], answer: "Run" },
-  { q: "Which one is an action word (verb)?", options: ["Jump", "Book", "Cat", "Table"], answer: "Jump" }
+  { q: "Which one is an action word (verb)?", options: ["Jump", "Book", "Cat", "Table"], answer: "Jump" },
+  { q: "Which one is an action word (verb)?", options: ["Sing", "Flower", "Chair", "Ball"], answer: "Sing" },
+  { q: "Which one is a naming word (noun) for a place?", options: ["Park", "Run", "Jump", "Quickly"], answer: "Park" },
+  { q: "Which one is a naming word (noun) for an animal?", options: ["Elephant", "Eat", "Fast", "Sleepy"], answer: "Elephant" },
+  { q: "Which word describes how something looks or feels (a describing word)?", options: ["Red", "Run", "School", "Jump"], answer: "Red" },
+  { q: "Which word describes how something looks or feels (a describing word)?", options: ["Tall", "Book", "Sit", "Bird"], answer: "Tall" },
+  { q: "Which word can we use instead of a boy's name, like 'Reyom'?", options: ["He", "Run", "Book", "Happy"], answer: "He" },
+  { q: "Which word can we use instead of a girl's name, like 'Asmita'?", options: ["She", "Jump", "Table", "Fast"], answer: "She" },
+  { q: "What is the opposite of 'Fast'?", options: ["Slow", "Loud", "Big", "Tall"], answer: "Slow" },
+  { q: "What is the opposite of 'Open'?", options: ["Closed", "Wide", "New", "Old"], answer: "Closed" },
+  { q: "What is the plural of 'Ball'?", options: ["Balls", "Ball's", "Balles", "Bally"], answer: "Balls" },
+  { q: "What is the plural of 'Flower'?", options: ["Flowers", "Flower's", "Flowery", "Flowres"], answer: "Flowers" }
 ];
 
 /* -----------------------------------------------------------
